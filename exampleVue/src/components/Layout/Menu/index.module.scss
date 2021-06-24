@@ -1,0 +1,17 @@
+.menu {
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.openMenu {
+  width: 250px;
+}
+.closeMenu {
+  width: 65px;
+}
+.firstMenu {
+  width: 65px;
+  height: 100%;
+  background: linear-gradient(90deg, #006cff, #399efd) !important;
+}

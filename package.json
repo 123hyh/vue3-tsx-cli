@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node ./scripts/production.js",
-    "server": "node ./scripts/development.js"
+    "build": "cross-env FRAME_TYPE=vue  node ./scripts/production.js",
+    "server": "cross-env FRAME_TYPE=vue ACTIVE_PROFILES=dev node ./scripts/development.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,7 @@
     "@vue/babel-plugin-jsx": "^1.0.6",
     "@vue/compiler-sfc": "^3.1.1",
     "core-js": "^3.14.0",
+    "cross-env": "^7.0.3",
     "css-minimizer-webpack-plugin": "^3.0.1",
     "hash-sum": "^2.0.0",
     "html-webpack-plugin": "^5.3.1",
@@ -45,5 +46,9 @@
     "typescript": "^4.3.4",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.8.0"
+  },
+  "engines": {
+    "npm": ">=6",
+    "node": ">=14"
   }
 }

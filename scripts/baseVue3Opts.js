@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-06-20 15:31:50
- * @LastEditTime: 2021-06-23 20:51:05
+ * @LastEditTime: 2021-06-24 22:51:01
  * @LastEditors: Please set LastEditors
  * @Description: vue3 配置
  * @FilePath: \webpack-vscode\scripts\baseVue3Opts.js
@@ -14,13 +14,36 @@ module.exports = {
   entry: {
     vue_bundle: resolveRootPath("./exampleVue/src/main.ts"),
   },
+  resolve: {
+    extensions: [".tsx"],
+  },
   module: {
     rules: [
       {
         test: /\.vue$/,
         loader: "vue-loader",
       },
+      {
+        test: /\.tsx$/,
+        use: [
+          "babel-loader",
+          {
+            loader: "vue-tsx-hot-loader",
+          },
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
+      },
     ],
+  },
+  resolveLoader: {
+    alias: {
+      "vue-tsx-hot-loader": require.resolve("./loader/vue3HotLoader.js"),
+    },
   },
   plugins: [
     isProd === false &&

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-06-19 12:54:51
- * @LastEditTime: 2021-06-23 22:57:32
+ * @LastEditTime: 2021-06-24 23:25:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \webpack-vscode\scripts\baseOpts.js
@@ -22,11 +22,16 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const baseVue3Opts = require("./baseVue3Opts");
 const { merge } = require("webpack-merge");
+const { frameType, ...envOpts } = require("./.env/index");
+const webpack = require("webpack");
+
+const isUseVue = frameType === "vue";
 /**
  * 基础 webpack 配置
  */
 module.exports.baseWebpackOptions = merge(
   {
+    target: "web",
     entry: {
       main: "./src/main.ts",
     },
@@ -36,7 +41,7 @@ module.exports.baseWebpackOptions = merge(
       path: resolveRootPath("dist"),
     },
     resolve: {
-      extensions: [".ts", ".tsx", ".js"],
+      extensions: [".ts", ".js"],
     },
     module: {
       rules: [
@@ -48,9 +53,9 @@ module.exports.baseWebpackOptions = merge(
           },
           parser: {
             dataUrlCondition: {
-              maxSize: 4 * 1024 // 4kb
-            }
-          }
+              maxSize: 4 * 1024, // 4kb
+            },
+          },
         },
         {
           test: /.jsx?$/,
@@ -61,12 +66,9 @@ module.exports.baseWebpackOptions = merge(
           ],
         },
         {
-          test: /\.tsx?$/,
+          test: /\.ts$/,
           use: [
             "babel-loader",
-            {
-              loader: "vue-tsx-hot-loader",
-            },
             {
               loader: "ts-loader",
               options: {
@@ -77,19 +79,27 @@ module.exports.baseWebpackOptions = merge(
         },
       ],
     },
-    resolveLoader: {
-      alias: {
-        "vue-tsx-hot-loader": require.resolve("./loader/vue3HotLoader.js"),
-      },
-    },
     plugins: [
       new HtmlWebpackPlugin({
         title: "Hot Module Replacement",
         template: resolveRootPath("./index.html"),
+        chunks: ["main"],
       }),
+      /**
+       * 注入 环境变量
+       */
+      new webpack.DefinePlugin(
+        Object.keys(envOpts).reduce((envs, key) => {
+          return { ...envs, [key]: JSON.stringify(envOpts[key]) };
+        }, {})
+      ),
     ],
+    cache: {
+      type: "filesystem",
+      allowCollectingMemory: true,
+    },
   },
-  baseVue3Opts
+  isUseVue && baseVue3Opts
 );
 /**
  *  样式 基础 loader
@@ -120,8 +130,10 @@ module.exports.baseCssRules = (webpackMode = "development") => {
             {
               loader: "css-loader",
               options: {
-                modules: true,
-                localIdentName: "[hash:base64:6]",
+                modules: {
+                  compileType: "module",
+                  namedExport: true
+                },
               },
             },
           ],

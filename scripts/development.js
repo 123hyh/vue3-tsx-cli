@@ -28,7 +28,6 @@ const serverOpts = {
 const webpackOpts = merge(baseWebpackOptions, {
   mode: "development",
   devtool: "source-map",
-  target: "web",
   ...baseCssRules(),
   plugins: [
     new FriendlyErrorsWebpackPlugin({
