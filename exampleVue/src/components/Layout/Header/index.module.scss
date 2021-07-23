@@ -1,5 +1,15 @@
+$heigth : 70px;
 .headerWrap {
-  position: sticky;
-  top: 0;
   width: 100%;
+  height: $heigth;
+  .fixedWrap{
+    position: fixed;
+    top: 0;
+    height: $heigth;
+    background: #fff;
+    padding: 0 20px;
+    box-sizing: border-box;
+    box-shadow: 0px 7px 7px -7px #d8d8d8;
+    display: flex;
+  }
 }

@@ -1,16 +1,43 @@
-import { defineComponent } from "vue";
-import styles from './index.module.scss'
+import {
+  defineComponent,
+  ref,
+  getCurrentInstance,
+  onUpdated,
+  onMounted,
+} from "vue";
+import styles from "./index.module.scss";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 /*
  * @Author: your name
  * @Date: 2021-06-24 21:54:33
- * @LastEditTime: 2021-06-24 22:48:15
+ * @LastEditTime: 2021-07-23 23:22:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \webpack-vscode\exampleVue\src\components\Layout\Header\index.tsx
  */
+export const MENU_STORE = ref(false);
 export default defineComponent({
   name: "Header",
   setup() {
-    return () => <div class={styles.headerWrap}>Header</div>;
+    const elem = ref<Element>();
+    let fixedWidth = ref<string>("");
+    
+    const getWidth = () => {
+      fixedWidth.value = window.getComputedStyle(elem.value as Element).width;
+    };
+    onMounted(getWidth);
+    onUpdated(getWidth );
+    return () => (
+      <div ref={elem} class={styles.headerWrap}>
+        <div class={styles.fixedWrap} style={`width: ${fixedWidth.value};`}>
+          <div style='font-size: 1.5rem'>
+            <div onClick={() => (MENU_STORE.value = !MENU_STORE.value)}>
+            {MENU_STORE.value ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
+          </div>
+          </div>
+          
+        </div>
+      </div>
+    );
   },
 });

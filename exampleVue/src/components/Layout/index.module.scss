@@ -2,6 +2,7 @@
   min-height: 100vh;
   overflow: auto;
   display: grid;
+  transition: all 0.1s linear;
 }
 .openMenuMargin {
   margin-left: 250px;

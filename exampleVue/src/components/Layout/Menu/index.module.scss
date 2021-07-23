@@ -3,6 +3,7 @@
   position: fixed;
   left: 0;
   top: 0;
+  transition: all .1s linear;
 }
 .openMenu {
   width: 250px;
@@ -11,7 +12,7 @@
   width: 65px;
 }
 .firstMenu {
-  width: 65px;
+  width: 100%;
   height: 100%;
   background: linear-gradient(90deg, #006cff, #399efd) !important;
 }
