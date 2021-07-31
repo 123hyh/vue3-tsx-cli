@@ -1,8 +1,8 @@
-$heigth : 70px;
+$heigth: 80px;
 .headerWrap {
   width: 100%;
   height: $heigth;
-  .fixedWrap{
+  .fixedWrap {
     position: fixed;
     top: 0;
     height: $heigth;
@@ -10,7 +10,14 @@ $heigth : 70px;
     padding: 0 20px;
     box-sizing: border-box;
     box-shadow: 0px 7px 7px -7px #d8d8d8;
-    display: flex;
-    justify-content: space-between;
+    :global(.ant-tabs-bar) {
+      margin: 0;
+      :global(.anticon-close) {
+        display: none;
+      }
+      :global(.ant-tabs-tab):hover :global(.anticon-close) {
+        display: inline;
+      }
+    }
   }
 }

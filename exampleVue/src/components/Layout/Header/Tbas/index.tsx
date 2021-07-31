@@ -1,9 +1,10 @@
 import { defineComponent, reactive, ref } from "vue";
 import { Tabs } from "ant-design-vue";
+import { useRouter, onBeforeRouteUpdate, useRoute } from "vue-router";
 /*
  * @Author: your name
  * @Date: 2021-07-23 23:43:01
- * @LastEditTime: 2021-07-24 00:08:43
+ * @LastEditTime: 2021-07-31 21:04:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \webpack-vscode\exampleVue\src\components\Layout\Header\Tbas\index.tsx
@@ -11,24 +12,48 @@ import { Tabs } from "ant-design-vue";
 export default defineComponent({
   name: "ATabs",
   setup() {
-    const activeKey = ref<string>("tab1");
+    const currentRoute = useRoute();
+    const activeKey = ref<string>(
+      (currentRoute.name as string).toUpperCase() === "NOTFOUND"
+        ? ""
+        : currentRoute.path
+    );
+    const { push } = useRouter();
     const list = reactive([
       {
-        route: "tab1",
-        label: "tab1",
-      },
-      {
-        route: "tab2",
-        label: "tab2",
-      },
-      {
-        route: "tab3",
-        label: "tab3",
+        route: currentRoute.path,
+        label: currentRoute.matched[currentRoute.matched.length - 1].meta.title,
       },
     ]);
-    return (
-      <>
-      <Tabs type="editable-card" v-model={[activeKey.value, ["activeKey"]]}>
+    function removeTab(
+      removeRoute: string | MouseEvent,
+      action: "add" | "remove"
+    ) {
+      if (action === "remove") {
+        list.forEach(({ route }, i) => {
+          if (route === removeRoute) {
+            list.splice(i, 1);
+          }
+        });
+      }
+    }
+    onBeforeRouteUpdate((to) => {
+      if ((to.name as string).toUpperCase() === "NOTFOUND") {
+        return (activeKey.value = "");
+      }
+      if (list.every((item) => item.route !== to.path)) {
+        list.push({ route: to.path, label: to.meta.title });
+      }
+      activeKey.value = to.path;
+    });
+    return () => (
+      <Tabs
+        type="editable-card"
+        hide-add
+        v-model={[activeKey.value, "activeKey"]}
+        onEdit={(v, action) => removeTab(v, action)}
+        onChange={(r) => push(r)}
+      >
         {list.map((item) => (
           <Tabs.TabPane
             key={item.route}
@@ -37,7 +62,6 @@ export default defineComponent({
           ></Tabs.TabPane>
         ))}
       </Tabs>
-      </>
     );
   },
 });

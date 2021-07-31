@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-06-19 14:01:28
- * @LastEditTime: 2021-06-19 17:59:02
+ * @LastEditTime: 2021-07-24 23:52:20
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \webpack-vscode\scripts\development.js
@@ -20,7 +20,11 @@ const serverOpts = {
   contentBase: resolveRootPath("dist"),
   hot: true,
   quiet: true,
-  historyApiFallback: true,
+  historyApiFallback: {
+    rewrites:[
+      { from: /^\/vue/, to: '/vue/index.html' },
+    ]
+  },
   clientLogLevel: "silent",
   port: 3000,
 };
