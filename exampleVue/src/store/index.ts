@@ -6,7 +6,7 @@ import useStoreHooks from "./hook";
 /*
  * @Author: your name
  * @Date: 2021-07-31 17:43:38
- * @LastEditTime: 2021-07-31 20:59:03
+ * @LastEditTime: 2021-07-31 21:22:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \webpack-vscode\exampleVue\src\store\index.ts
@@ -18,4 +18,8 @@ const store = createStore({
   },
 });
 export default store;
+
+/**
+ * store 钩子 判断首次是否登录
+ */
 export const storeBeforeHook = useStoreHooks(store);
